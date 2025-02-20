@@ -44,12 +44,22 @@ async function run() {
     });
 
     // 🔄 Get Tasks by Category
-    app.get("/tasks", async (req, res) => {
-      const category = req.query.category;
-      const query = category ? { category } : {};
-      const result = await tasksCollection.find(query).toArray();
-      res.send(result);
-    });
+    app.get("/categoryTasks", async (req, res) => {
+        const { category, email } = req.query;
+      
+        // 🟡 Build the query dynamically
+        const query = {};
+        if (category) query.category = category;
+        if (email) query.email = email;
+      
+        try {
+          const result = await tasksCollection.find(query).toArray();
+          res.send(result);
+        } catch (error) {
+          res.status(500).send({ error: "Failed to fetch tasks" });
+        }
+      });
+      
 
     // 🟢 Update Task Category
     app.put("/tasks/:id", async (req, res) => {
@@ -95,8 +105,36 @@ async function run() {
       }
     });
 
-   
+    // Update Task
+    app.get("/singleTasks/:id", async (req, res) => {
+      const taskId = req.params.id;
+      const result = await tasksCollection.findOne({
+        _id: new ObjectId(taskId),
+      });
+      res.send(result);
+    });
 
+    app.patch("/updateTasks/:id", async (req, res) => {
+      const taskId = req.params.id;
+      const updateTask = req.body;
+     console.log(updateTask);
+      try {
+        const result = await tasksCollection.updateOne(
+          { _id: new ObjectId(taskId) },
+          { $set: { ...updateTask } }
+        );
+
+        if (result.modifiedCount === 0) {
+          return res
+            .status(404)
+            .send({ message: "Task not found or already updated" });
+        }
+        res.send({ message: "Task updated successfully", result });
+      } catch (error) {
+        console.error("Error updating task:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+      }
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. Connected to MongoDB!");
