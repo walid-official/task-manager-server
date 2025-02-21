@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const usersCollection = client.db("task_db").collection("users");
     const tasksCollection = client.db("task_db").collection("tasks");
 
@@ -44,7 +44,7 @@ async function run() {
     });
 
     // 🔄 Get Tasks by Category
-    app.get("/categoryTasks", async (req, res) => {
+    app.get("/tasks", async (req, res) => {
         const { category, email } = req.query;
       
         // 🟡 Build the query dynamically
@@ -136,7 +136,7 @@ async function run() {
       }
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. Connected to MongoDB!");
   } finally {
     // Keep the connection open for development
