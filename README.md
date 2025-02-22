@@ -6,7 +6,7 @@
 A fully responsive Task Management App where users can add, edit, delete, and reorder tasks using a drag-and-drop interface. Tasks are organized into To-Do, In Progress, and Done categories, with real-time updates and instant database persistence. The app features a clean, minimalistic UI optimized for both desktop and mobile users, showcasing seamless frontend interactivity, efficient backend data handling, and real-time synchronization. 🚀
 
 #  🌟  Live Site URL
-     https://task-manager-b3d83.web.app/
+     https://task-manager-web-app.surge.sh/
   
 
 ## Dependencies
